@@ -1,0 +1,798 @@
+{
+  "note": "SYNTHETIC / ILLUSTRATIVE – prices are indicative ranges only, not real market data.",
+  "instruments": [
+    {
+      "id": "mouth_mirror",
+      "category": "examination",
+      "name_en": "Mouth Mirror",
+      "name_hi": "मुँह का दर्पण",
+      "aliases_en": [
+        "dental mirror",
+        "mouth mirror #5"
+      ],
+      "aliases_hi": [
+        "मुंह दर्पण"
+      ],
+      "new_price_range_inr": [
+        150,
+        800
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "dental_probe",
+      "category": "examination",
+      "name_en": "Dental Probe (Shepherd's Hook)",
+      "name_hi": "डेंटल प्रोब",
+      "aliases_en": [
+        "explorer",
+        "shepherd hook probe",
+        "#23 explorer"
+      ],
+      "aliases_hi": [
+        "जांच सुई"
+      ],
+      "new_price_range_inr": [
+        120,
+        600
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "periodontal_probe",
+      "category": "examination",
+      "name_en": "Periodontal Probe (Williams)",
+      "name_hi": "पेरियोडोंटल प्रोब",
+      "aliases_en": [
+        "perio probe",
+        "UNC probe",
+        "williams probe"
+      ],
+      "aliases_hi": [
+        "पेरियो प्रोब"
+      ],
+      "new_price_range_inr": [
+        200,
+        900
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "college_tweezers",
+      "category": "examination",
+      "name_en": "College Tweezers",
+      "name_hi": "कॉलेज ट्वीज़र",
+      "aliases_en": [
+        "dental tweezers",
+        "cotton pliers"
+      ],
+      "aliases_hi": [
+        "दंत चिमटी"
+      ],
+      "new_price_range_inr": [
+        100,
+        500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "excavator_spoon",
+      "category": "restorative",
+      "name_en": "Spoon Excavator",
+      "name_hi": "स्पून एक्स्केवेटर",
+      "aliases_en": [
+        "dental excavator",
+        "caries excavator"
+      ],
+      "aliases_hi": [
+        "खुरचनी"
+      ],
+      "new_price_range_inr": [
+        150,
+        700
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "sickle_scaler",
+      "category": "periodontics",
+      "name_en": "Sickle Scaler",
+      "name_hi": "सिकल स्केलर",
+      "aliases_en": [
+        "anterior sickle",
+        "H6/H7 scaler"
+      ],
+      "aliases_hi": [
+        "दरांती स्केलर"
+      ],
+      "new_price_range_inr": [
+        200,
+        1200
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "curette_gracey",
+      "category": "periodontics",
+      "name_en": "Gracey Curette",
+      "name_hi": "ग्रेसी क्यूरेट",
+      "aliases_en": [
+        "gracey 1/2",
+        "gracey 7/8",
+        "gracey 11/12",
+        "gracey 13/14"
+      ],
+      "aliases_hi": [
+        "ग्रेसी करेट"
+      ],
+      "new_price_range_inr": [
+        300,
+        1800
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "universal_curette",
+      "category": "periodontics",
+      "name_en": "Universal Curette (Columbia 13/14)",
+      "name_hi": "यूनिवर्सल क्यूरेट",
+      "aliases_en": [
+        "columbia curette",
+        "barnhart curette"
+      ],
+      "aliases_hi": [
+        "सार्वभौमिक करेट"
+      ],
+      "new_price_range_inr": [
+        300,
+        1600
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "ultrasonic_tip",
+      "category": "periodontics",
+      "name_en": "Ultrasonic Scaler Tip",
+      "name_hi": "अल्ट्रासोनिक टिप",
+      "aliases_en": [
+        "cavitron tip",
+        "piezo tip",
+        "EMS tip"
+      ],
+      "aliases_hi": [
+        "अल्ट्रासोनिक नोज़ल"
+      ],
+      "new_price_range_inr": [
+        400,
+        3000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "extraction_forceps_upper_anterior",
+      "category": "oral_surgery",
+      "name_en": "Extraction Forceps (Upper Anterior)",
+      "name_hi": "ऊपरी पूर्व दाँत संदंश",
+      "aliases_en": [
+        "upper anterior forceps",
+        "#1 forceps",
+        "universal upper forceps"
+      ],
+      "aliases_hi": [
+        "ऊपरी संदंश"
+      ],
+      "new_price_range_inr": [
+        500,
+        2500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "extraction_forceps_upper_molar",
+      "category": "oral_surgery",
+      "name_en": "Extraction Forceps (Upper Molar)",
+      "name_hi": "ऊपरी दाढ़ संदंश",
+      "aliases_en": [
+        "upper molar forceps",
+        "#53 forceps",
+        "cowhorn upper"
+      ],
+      "aliases_hi": [
+        "ऊपरी दाढ़ चिमटी"
+      ],
+      "new_price_range_inr": [
+        600,
+        3000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "extraction_forceps_lower_molar",
+      "category": "oral_surgery",
+      "name_en": "Extraction Forceps (Lower Molar)",
+      "name_hi": "निचली दाढ़ संदंश",
+      "aliases_en": [
+        "lower molar forceps",
+        "#16 forceps",
+        "cowhorn lower"
+      ],
+      "aliases_hi": [
+        "निचली दाढ़ चिमटी"
+      ],
+      "new_price_range_inr": [
+        600,
+        3000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "dental_elevator_straight",
+      "category": "oral_surgery",
+      "name_en": "Straight Dental Elevator",
+      "name_hi": "सीधा एलिवेटर",
+      "aliases_en": [
+        "#301 elevator",
+        "straight elevator",
+        "root elevator straight"
+      ],
+      "aliases_hi": [
+        "सीधा उत्थापक"
+      ],
+      "new_price_range_inr": [
+        300,
+        1500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "dental_elevator_cryer",
+      "category": "oral_surgery",
+      "name_en": "Cryer Elevator (Pair)",
+      "name_hi": "क्रायर एलिवेटर",
+      "aliases_en": [
+        "cryer left right",
+        "cross-bar elevator",
+        "figure 8 elevator"
+      ],
+      "aliases_hi": [
+        "क्रायर उत्थापक"
+      ],
+      "new_price_range_inr": [
+        600,
+        3000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "periosteal_elevator",
+      "category": "oral_surgery",
+      "name_en": "Periosteal Elevator (Molt #9)",
+      "name_hi": "पेरियोस्टील एलिवेटर",
+      "aliases_en": [
+        "molt 9",
+        "periosteal raspatory",
+        "tissue elevator"
+      ],
+      "aliases_hi": [
+        "पेरियोस्टील उत्थापक"
+      ],
+      "new_price_range_inr": [
+        300,
+        1800
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "composite_instrument_set",
+      "category": "restorative",
+      "name_en": "Composite Placement Instrument Set",
+      "name_hi": "कंपोज़िट इंस्ट्रूमेंट सेट",
+      "aliases_en": [
+        "composite spatula set",
+        "TPFD instruments",
+        "composite plugger"
+      ],
+      "aliases_hi": [
+        "कम्पोज़िट सेट"
+      ],
+      "new_price_range_inr": [
+        800,
+        4000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "amalgam_carrier",
+      "category": "restorative",
+      "name_en": "Amalgam Carrier",
+      "name_hi": "अमलगम कैरियर",
+      "aliases_en": [
+        "amalgam gun",
+        "amalgam syringe"
+      ],
+      "aliases_hi": [
+        "अमलगम वाहक"
+      ],
+      "new_price_range_inr": [
+        400,
+        2000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "amalgam_condenser",
+      "category": "restorative",
+      "name_en": "Amalgam Condenser",
+      "name_hi": "अमलगम कंडेन्सर",
+      "aliases_en": [
+        "plugger",
+        "amalgam plugger",
+        "condenser"
+      ],
+      "aliases_hi": [
+        "अमलगम प्लगर"
+      ],
+      "new_price_range_inr": [
+        200,
+        1200
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "burnisher_ball",
+      "category": "restorative",
+      "name_en": "Ball Burnisher",
+      "name_hi": "बॉल बर्निशर",
+      "aliases_en": [
+        "football burnisher",
+        "egg burnisher",
+        "burnisher"
+      ],
+      "aliases_hi": [
+        "बर्निशर"
+      ],
+      "new_price_range_inr": [
+        150,
+        800
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "carver_cleoid_discoid",
+      "category": "restorative",
+      "name_en": "Cleoid-Discoid Carver",
+      "name_hi": "क्लियॉइड-डिस्कॉइड कार्वर",
+      "aliases_en": [
+        "C-D carver",
+        "discoid carver",
+        "cleoid discoid"
+      ],
+      "aliases_hi": [
+        "कार्वर"
+      ],
+      "new_price_range_inr": [
+        200,
+        1000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "endo_spreader",
+      "category": "endodontics",
+      "name_en": "Finger Spreader (D11)",
+      "name_hi": "फिंगर स्प्रेडर",
+      "aliases_en": [
+        "lateral spreader",
+        "endodontic spreader",
+        "finger spreader"
+      ],
+      "aliases_hi": [
+        "स्प्रेडर"
+      ],
+      "new_price_range_inr": [
+        300,
+        1500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "endo_plugger",
+      "category": "endodontics",
+      "name_en": "Endodontic Plugger",
+      "name_hi": "एंडो प्लगर",
+      "aliases_en": [
+        "gutta percha plugger",
+        "vertical plugger",
+        "heat plugger"
+      ],
+      "aliases_hi": [
+        "एंडो प्लगर"
+      ],
+      "new_price_range_inr": [
+        300,
+        1500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "barbed_broach",
+      "category": "endodontics",
+      "name_en": "Barbed Broach (pack)",
+      "name_hi": "बार्बड ब्रोच",
+      "aliases_en": [
+        "broach",
+        "pulp extirpator"
+      ],
+      "aliases_hi": [
+        "ब्रोच"
+      ],
+      "new_price_range_inr": [
+        50,
+        200
+      ],
+      "reprocessable": false,
+      "illustrative": true
+    },
+    {
+      "id": "hand_files_k_type",
+      "category": "endodontics",
+      "name_en": "K-Type Hand Files (pack)",
+      "name_hi": "के-फाइल",
+      "aliases_en": [
+        "k-file",
+        "#15 k-file",
+        "#20 k-file",
+        "endodontic file"
+      ],
+      "aliases_hi": [
+        "के-फाइल"
+      ],
+      "new_price_range_inr": [
+        80,
+        300
+      ],
+      "reprocessable": false,
+      "illustrative": true
+    },
+    {
+      "id": "weingart_plier",
+      "category": "orthodontics",
+      "name_en": "Weingart Plier",
+      "name_hi": "वेइनगार्ट प्लायर",
+      "aliases_en": [
+        "weingart utility plier",
+        "archwire placement plier"
+      ],
+      "aliases_hi": [
+        "वेइनगार्ट प्लायर"
+      ],
+      "new_price_range_inr": [
+        600,
+        3000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "bird_beak_plier",
+      "category": "orthodontics",
+      "name_en": "Bird Beak Plier (139)",
+      "name_hi": "बर्ड बीक प्लायर",
+      "aliases_en": [
+        "#139 plier",
+        "bird beak",
+        "loop forming plier"
+      ],
+      "aliases_hi": [
+        "पक्षी चोंच प्लायर"
+      ],
+      "new_price_range_inr": [
+        500,
+        2500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "distal_end_cutter",
+      "category": "orthodontics",
+      "name_en": "Distal End Cutter",
+      "name_hi": "डिस्टल एंड कटर",
+      "aliases_en": [
+        "archwire cutter",
+        "distal-end cutting plier",
+        "ligature cutter"
+      ],
+      "aliases_hi": [
+        "डिस्टल कटर"
+      ],
+      "new_price_range_inr": [
+        800,
+        4000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "impression_tray_upper",
+      "category": "prosthodontics",
+      "name_en": "Perforated Impression Tray (Upper)",
+      "name_hi": "इम्प्रेशन ट्रे (ऊपरी)",
+      "aliases_en": [
+        "stock tray upper",
+        "impression tray",
+        "perforated tray"
+      ],
+      "aliases_hi": [
+        "छाप ट्रे"
+      ],
+      "new_price_range_inr": [
+        100,
+        600
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "impression_tray_lower",
+      "category": "prosthodontics",
+      "name_en": "Perforated Impression Tray (Lower)",
+      "name_hi": "इम्प्रेशन ट्रे (निचली)",
+      "aliases_en": [
+        "stock tray lower",
+        "lower impression tray"
+      ],
+      "aliases_hi": [
+        "निचली छाप ट्रे"
+      ],
+      "new_price_range_inr": [
+        100,
+        600
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "shade_guide",
+      "category": "prosthodontics",
+      "name_en": "Vita Classic Shade Guide",
+      "name_hi": "शेड गाइड",
+      "aliases_en": [
+        "shade tab",
+        "vita shade guide",
+        "tooth shade guide"
+      ],
+      "aliases_hi": [
+        "रंग गाइड"
+      ],
+      "new_price_range_inr": [
+        1500,
+        8000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "handpiece_highspeed",
+      "category": "handpieces",
+      "name_en": "High-Speed Air Turbine Handpiece",
+      "name_hi": "हाई-स्पीड हैंडपीस",
+      "aliases_en": [
+        "turbine handpiece",
+        "air rotor",
+        "high speed drill"
+      ],
+      "aliases_hi": [
+        "हाई स्पीड ड्रिल"
+      ],
+      "new_price_range_inr": [
+        3000,
+        25000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "handpiece_lowspeed",
+      "category": "handpieces",
+      "name_en": "Low-Speed Straight Handpiece",
+      "name_hi": "लो-स्पीड हैंडपीस",
+      "aliases_en": [
+        "straight micromotor",
+        "NSK low speed",
+        "contra angle"
+      ],
+      "aliases_hi": [
+        "लो स्पीड ड्रिल"
+      ],
+      "new_price_range_inr": [
+        2000,
+        15000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "ultrasonic_scaler_unit",
+      "category": "handpieces",
+      "name_en": "Ultrasonic Scaler Unit",
+      "name_hi": "अल्ट्रासोनिक स्केलर",
+      "aliases_en": [
+        "piezo scaler",
+        "cavitron",
+        "ultrasonic cleaner unit"
+      ],
+      "aliases_hi": [
+        "अल्ट्रासोनिक स्केलर मशीन"
+      ],
+      "new_price_range_inr": [
+        5000,
+        40000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "rubber_dam_forceps",
+      "category": "restorative",
+      "name_en": "Rubber Dam Forceps",
+      "name_hi": "रबर डैम फोरसेप्स",
+      "aliases_en": [
+        "dam forceps",
+        "ivory forceps",
+        "rubber dam clamp forceps"
+      ],
+      "aliases_hi": [
+        "रबर डैम फोरसेप्स"
+      ],
+      "new_price_range_inr": [
+        600,
+        3000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "rubber_dam_frame",
+      "category": "restorative",
+      "name_en": "Rubber Dam Frame (Young's)",
+      "name_hi": "रबर डैम फ्रेम",
+      "aliases_en": [
+        "youngs frame",
+        "rubber dam holder",
+        "star visi frame"
+      ],
+      "aliases_hi": [
+        "रबर डैम फ्रेम"
+      ],
+      "new_price_range_inr": [
+        200,
+        1000
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "mouth_prop",
+      "category": "examination",
+      "name_en": "Molt Mouth Prop",
+      "name_hi": "मोल्ट माउथ प्रॉप",
+      "aliases_en": [
+        "mouth gag",
+        "bite block",
+        "mouth opener"
+      ],
+      "aliases_hi": [
+        "माउथ प्रॉप"
+      ],
+      "new_price_range_inr": [
+        150,
+        700
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "articulating_paper_holder",
+      "category": "restorative",
+      "name_en": "Articulating Paper Holder (Miller's)",
+      "name_hi": "आर्टिकुलेटिंग पेपर होल्डर",
+      "aliases_en": [
+        "miller forceps",
+        "occlusal paper holder",
+        "bite paper holder"
+      ],
+      "aliases_hi": [
+        "आर्टिकुलेटिंग होल्डर"
+      ],
+      "new_price_range_inr": [
+        150,
+        700
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "bone_file",
+      "category": "oral_surgery",
+      "name_en": "Bone File (Sugarman)",
+      "name_hi": "बोन फाइल",
+      "aliases_en": [
+        "bone file",
+        "sugarman file",
+        "osseous file"
+      ],
+      "aliases_hi": [
+        "हड्डी फाइल"
+      ],
+      "new_price_range_inr": [
+        300,
+        1500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "needle_holder",
+      "category": "oral_surgery",
+      "name_en": "Needle Holder (Mayo-Hegar)",
+      "name_hi": "नीडल होल्डर",
+      "aliases_en": [
+        "needle driver",
+        "mayo hegar needle holder",
+        "suture needle holder"
+      ],
+      "aliases_hi": [
+        "सुई धारक"
+      ],
+      "new_price_range_inr": [
+        400,
+        2500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    },
+    {
+      "id": "tissue_scissors",
+      "category": "oral_surgery",
+      "name_en": "Dean Scissors",
+      "name_hi": "डीन कैंची",
+      "aliases_en": [
+        "dean scissors",
+        "suture scissors",
+        "dean tissue scissors"
+      ],
+      "aliases_hi": [
+        "डीन कैंची"
+      ],
+      "new_price_range_inr": [
+        300,
+        1500
+      ],
+      "reprocessable": true,
+      "illustrative": true
+    }
+  ]
+}

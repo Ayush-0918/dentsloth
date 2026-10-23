@@ -1,0 +1,15 @@
+{
+  "description": "Atlas Vector Search index \u2013 to be created in Phase 4",
+  "collection": "listings",
+  "database": "dentsloth",
+  "index_name": "listing_embedding_index",
+  "type": "vectorSearch",
+  "fields": [
+    {
+      "type": "vector",
+      "path": "embedding",
+      "numDimensions": 768,
+      "similarity": "cosine"
+    }
+  ]
+}
