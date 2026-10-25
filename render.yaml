@@ -1,10 +1,9 @@
 # render.yaml — DentSloth 100% Free Tier Deployment Blueprint for Render
-# https://docs.render.com/blueprint-spec
-# Note: Render Cron Jobs require a paid plan, so the cron service is omitted.
-# Nightly Sloth Run can be triggered on-demand via /api/dashboard or GitHub Actions.
+# Schema: https://docs.render.com/blueprint-spec
+# Free Tier: Exactly 2 free services (Web Service + Static Site). No card required.
 
 services:
-  # ── FastAPI Backend (Free 512 MB Web Service) ────────────────────
+  # ── 1. FastAPI Backend (Free Web Service) ─────────────────────────
   - type: web
     name: dentsloth-api
     runtime: python
@@ -14,48 +13,49 @@ services:
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
-        value: production
+        value: "production"
       - key: DEMO_MODE
         value: "false"
       - key: LLM_PROVIDER
-        value: hosted
+        value: "hosted"
       - key: GEMMA_API_KEY
-        sync: false             # Secret: set in Render dashboard
+        sync: false
       - key: MONGODB_URI
-        sync: false             # Secret: set in Render dashboard
+        sync: false
       - key: MONGODB_DB
-        value: dentsloth
+        value: "dentsloth"
       - key: TABPFN_MODE
-        value: api              # CPU/RAM optimization: uses TabPFN Cloud API
+        value: "api"
       - key: TABPFN_API_KEY
-        sync: false             # Secret: set in Render dashboard
+        sync: false
       - key: SENTRY_DSN
-        sync: false             # Secret: set in Render dashboard
+        sync: false
       - key: ENABLE_DEBUG
-        value: "false"          # Toggle to "true" to test /api/debug/trace-test
+        value: "false"
       - key: CORS_ORIGINS
-        value: https://dentsloth-web.onrender.com,https://dentsloth.onrender.com,https://dentsloth.tech
+        value: "https://dentsloth-web.onrender.com,https://dentsloth.onrender.com,https://dentsloth.tech"
       - key: MAX_UPLOAD_MB
-        value: 10
+        value: "10"
       - key: PYTHON_VERSION
-        value: 3.12.0
+        value: "3.12.0"
 
-  # ── Static Frontend (Free Static Site) ───────────────────────────
+  # ── 2. Static Frontend (Free Static Site) ──────────────────────────
   - type: web
     name: dentsloth-web
     runtime: static
+    plan: free
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
     headers:
       - path: /*
         name: Cache-Control
-        value: public, max-age=0, must-revalidate
+        value: "public, max-age=0, must-revalidate"
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://dentsloth-api.onrender.com/api
+        value: "https://dentsloth-api.onrender.com/api"
       - key: VITE_DEMO_MODE
         value: "false"

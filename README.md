@@ -18,7 +18,7 @@ Photo → Gemma 3 4B vision identifies instrument(s) → TabPFN predicts fair pr
 ### 2 · Buyer Loop (Starter Kit Builder)
 New dentist types plain words: *"opening a general practice, budget ₹60k, need basic exam + scaling + extraction set"* → vector search retrieves best listings → greedy budget kit assembled → gaps added to wishlist.
 
-**Overnight Sloth Run**: nightly cron matches new listings with wishlists, leaves each user a 2-line morning summary.
+**Overnight Sloth Run**: background matcher script () matches listings with wishlists on demand or schedule, leaving each user a 2-line summary.
 
 ---
 
@@ -66,7 +66,7 @@ Wishlist ←→ Embedding match (cosine) ← Nightly Sloth Run → Morning Summa
 - **Gemma** – open-weight vision + language backbone
 - **TabPFN** – tabular price prediction (Prior Labs)
 - **MongoDB Atlas** + Atlas Vector Search – listings, wishlists, semantic matching
-- **Render** – API + static frontend + nightly Sloth Run cron
+- **Render** – API + static frontend (Sloth Run executed on-demand via )
 - **.tech domain** – `dentsloth.tech`
 
 ---
@@ -132,7 +132,7 @@ A [`render.yaml`](render.yaml) blueprint is included:
 
 1. **dentsloth-api** — FastAPI web service (`LLM_PROVIDER=hosted`, `TABPFN_MODE=api`)
 2. **dentsloth-web** — Static frontend (Vite build, `VITE_API_URL` set to API domain)
-3. **dentsloth-sloth-run** — Nightly cron for matching + morning summaries
+*(Note: Render free tier does not include cron jobs. Sloth Run is executed manually or via external schedule via )*
 
 Set secrets (`GEMMA_API_KEY`, `MONGODB_URI`, `TABPFN_API_KEY`) in the Render dashboard — they are never committed.
 

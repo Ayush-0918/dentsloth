@@ -83,7 +83,7 @@ Evaluated via `scripts/eval_pricing.py` using a deterministic 80/20 train/test s
 1. **`data/price_history.csv`:** Synthetic clinical sales dataset containing 601 records generated using real clinical depreciation curves and realistic noise. **Labeled as illustrative synthetic data.** The MAE/MAPE figures in §2 are measured on this synthetic data.
 2. **`data/instrument_catalog.json`:** Curated catalog of ~40 common dental instruments with representative retail price bounds.
 3. **Clinic & Seller Names:** Fictional illustrative clinic names (e.g. *Sunrise Dental Clinic, Lakeview Polyclinic*).
-4. **Notifications:** Sloth Run notifications are logged to the `events` collection and displayed on the morning dashboard. Physical SMS/WhatsApp gateways are mocked for hackathon testing.
+4. **Sloth Run & Notifications:** The Overnight Sloth Run is a standalone script (`scripts/sloth_run.py`) executed manually or via local/external schedule (not deployed as a cloud cron job). Match notifications are recorded in the `events` collection and surfaced on the morning clinic dashboard. Physical SMS/WhatsApp gateways are mocked for hackathon testing.
 5. **EXIF Privacy:** Uploaded photos have all EXIF and GPS geolocation metadata stripped before being processed by any model.
 6. **Manual Baseline:** The manual listing time has **not** been independently measured. The placeholder `MANUAL_TIME_TO_BE_MEASURED_BY_USER` should be replaced with a real timed benchmark before any comparative claims are made.
 
