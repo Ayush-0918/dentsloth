@@ -1,0 +1,49 @@
+.landing { padding-bottom: 80px; }
+
+/* Hero */
+.hero {
+  display: grid; grid-template-columns: 1fr; gap: var(--sp-7);
+  padding-top: clamp(var(--sp-7), 8vw, var(--sp-9));
+  padding-bottom: clamp(var(--sp-7), 8vw, var(--sp-9));
+  align-items: center;
+}
+@media (min-width: 700px) { .hero { grid-template-columns: 1fr 280px; } }
+
+.hero__content { display: flex; flex-direction: column; gap: var(--sp-5); }
+.hero__headline { color: var(--ink); }
+.hero__headline .word {
+  display: inline-block; opacity: 0;
+  filter: blur(6px);
+  animation: word-in var(--dur-slow) var(--ease-out) forwards;
+}
+@keyframes word-in {
+  to { opacity: 1; filter: blur(0); transform: none; }
+}
+.hero__sub { color: var(--ink-muted); font-size: clamp(1rem, 1.8vw, 1.2rem); max-width: 520px; }
+.hero__ctas { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.hero__mascot { display: flex; justify-content: center; }
+
+/* How it works */
+.how { text-align: center; }
+.how__title { margin-bottom: var(--sp-7); }
+.how__steps {
+  list-style: none; display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--sp-6);
+}
+.how__step { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); }
+.how__icon { font-size: 2.5rem; }
+.how__step-title { font-family: var(--font-serif); font-size: 1.25rem; }
+.how__step-body { color: var(--ink-muted); max-width: 240px; }
+
+/* Why open */
+.why-open { max-width: 680px; margin: 0 auto; }
+.why-open__title { margin-bottom: var(--sp-5); }
+.why-open__list { list-style: none; display: flex; flex-direction: column; gap: var(--sp-4); }
+.why-open__item { display: flex; align-items: flex-start; gap: var(--sp-3); color: var(--ink-muted); font-size: 1rem; }
+.why-open__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; margin-top: 8px;
+}
+
+/* Footer */
+.landing-footer { text-align: center; padding: var(--sp-6); color: var(--ink-subtle); font-size: 0.875rem; border-top: 1px solid var(--line); }

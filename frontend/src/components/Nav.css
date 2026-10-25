@@ -1,0 +1,48 @@
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.nav__inner {
+  display: flex; align-items: center; gap: var(--sp-5);
+  height: 60px;
+}
+.nav__logo { display: flex; align-items: center; gap: var(--sp-2); flex-shrink: 0; }
+.nav__wordmark { font-family: var(--font-serif); font-size: 1.25rem; color: var(--ink); font-weight: 400; letter-spacing: -0.02em; }
+.nav__links {
+  display: none; align-items: center; gap: var(--sp-5); flex: 1;
+  justify-content: center;
+}
+@media (min-width: 680px) { .nav__links { display: flex; } }
+.nav__link { color: var(--ink-muted); font-size: 0.9375rem; font-weight: 500; transition: color var(--dur-fast) var(--ease-out); }
+.nav__link:hover { color: var(--ink); text-decoration: none; }
+.nav__link--active { color: var(--ink); border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+.nav__controls { display: flex; align-items: center; gap: var(--sp-2); margin-left: auto; }
+.nav__btn {
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: var(--r-sm); padding: 6px 12px;
+  font-size: 0.8125rem; font-weight: 500; cursor: pointer; color: var(--ink);
+  transition: background var(--dur-fast) var(--ease-out);
+  min-height: 36px;
+}
+.nav__btn:hover { background: var(--bg); }
+
+/* Bottom tabs */
+.bottom-tabs {
+  display: flex; position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--surface); border-top: 1px solid var(--line); z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+}
+@media (min-width: 680px) { .bottom-tabs { display: none; } }
+.bottom-tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  padding: 8px 4px; gap: 2px; color: var(--ink-muted);
+  font-size: 0.6875rem; font-weight: 500; letter-spacing: .01em;
+  transition: color var(--dur-fast) var(--ease-out);
+  text-decoration: none; min-height: 56px;
+}
+.bottom-tab--active { color: var(--ink); }
+.bottom-tab--active .bottom-tab__icon { filter: none; }
+.bottom-tab__icon { font-size: 1.25rem; line-height: 1; }
+.bottom-tab__label { line-height: 1; }

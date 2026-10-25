@@ -1,0 +1,11 @@
+.app-root { min-height: 100dvh; display: flex; flex-direction: column; position: relative; }
+.app-content { flex: 1; position: relative; z-index: 1; }
+
+/* Skip link */
+.skip-link {
+  position: absolute; top: -40px; left: var(--sp-4);
+  background: var(--ink); color: var(--surface-2);
+  padding: 8px 16px; border-radius: var(--r-sm); z-index: 999;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: var(--sp-4); }

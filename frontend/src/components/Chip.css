@@ -1,0 +1,10 @@
+.chip {
+  border: 1.5px solid var(--line); border-radius: 20px;
+  padding: 6px 16px; background: var(--surface);
+  font-size: 0.875rem; font-family: var(--font-sans);
+  cursor: pointer; color: var(--ink-muted); font-weight: 500;
+  transition: all var(--dur-fast) var(--ease-out);
+  min-height: 36px;
+}
+.chip--active { background: var(--ink); color: var(--surface-2); border-color: var(--ink); }
+.chip:hover:not(.chip--active) { border-color: var(--ink-muted); color: var(--ink); }

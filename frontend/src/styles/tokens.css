@@ -1,0 +1,102 @@
+
+/* ═══════════════════════════════════════════════════════
+   DentSloth Design Tokens — single source of truth
+   Palette:
+     Ice Silver  #DDE3E8
+     Deep Aubergine #3A0F34
+     Marigold    #EAAA00
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Core colors ── */
+  --bg:            #DDE3E8;
+  --surface:       #EDF0F3;
+  --surface-2:     #F5F6F8;
+  --ink:           #3A0F34;
+  --ink-muted:     rgba(58,15,52,.70);
+  --ink-subtle:    rgba(58,15,52,.38);
+  --line:          rgba(58,15,52,.10);
+  --accent:        #EAAA00;
+  --accent-hover:  #CC9400;
+  --on-accent:     #3A0F34;
+
+  /* ── Status (harmonised) ── */
+  --ok:            #2D6B3C;
+  --ok-bg:         #E8F5EC;
+  --warn:          #85550A;
+  --warn-bg:       #FFF3D6;
+  --danger:        #8B1A1A;
+  --danger-bg:     #FDEAEA;
+
+  /* ── Spacing scale (4px base) ── */
+  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 24px;  --sp-6: 32px;  --sp-7: 48px;  --sp-8: 72px; --sp-9: 112px;
+
+  /* ── Radii ── */
+  --r-sm: 6px;  --r-md: 12px;  --r-lg: 20px;
+
+  /* ── Shadows (aubergine-tinted, never black) ── */
+  --shadow-sm: 0 1px 4px rgba(58,15,52,.07);
+  --shadow-md: 0 4px 20px rgba(58,15,52,.10);
+  --shadow-lg: 0 12px 48px rgba(58,15,52,.14);
+
+  /* ── Typography ── */
+  --font-serif:  'Fraunces', 'Georgia', serif;
+  --font-sans:   'DM Sans', 'Inter', system-ui, sans-serif;
+  --font-deva-serif: 'Noto Serif Devanagari', var(--font-serif);
+  --font-deva-sans:  'Noto Sans Devanagari', var(--font-sans);
+
+  /* ── Motion ── */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast:   200ms;
+  --dur-base:   400ms;
+  --dur-slow:   700ms;
+
+  /* ── Layout ── */
+  --max-w:      1200px;
+  --side-pad:   clamp(16px, 5vw, 48px);
+}
+
+/* ── Dark theme ── */
+[data-theme="dark"],
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:         #26092A;
+    --surface:    #321240;
+    --surface-2:  #3D1A4B;
+    --ink:        #DDE3E8;
+    --ink-muted:  rgba(221,227,232,.62);
+    --ink-subtle: rgba(221,227,232,.38);
+    --line:       rgba(221,227,232,.10);
+    --accent:     #EAAA00;
+    --accent-hover: #CC9400;
+    --on-accent:  #3A0F34;
+    --ok-bg:      rgba(45,107,60,.25);
+    --warn-bg:    rgba(234,170,0,.15);
+    --danger-bg:  rgba(139,26,26,.25);
+    --shadow-sm: 0 1px 4px rgba(0,0,0,.25);
+    --shadow-md: 0 4px 20px rgba(0,0,0,.35);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,.45);
+  }
+}
+[data-theme="dark"] {
+  --bg:         #26092A;
+  --surface:    #321240;
+  --surface-2:  #3D1A4B;
+  --ink:        #DDE3E8;
+  --ink-muted:  rgba(221,227,232,.62);
+  --ink-subtle: rgba(221,227,232,.38);
+  --line:       rgba(221,227,232,.10);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.25);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.35);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,.45);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

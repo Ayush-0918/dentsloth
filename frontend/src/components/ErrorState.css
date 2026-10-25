@@ -1,0 +1,7 @@
+.error-state {
+  background: var(--danger-bg); border-radius: var(--r-md);
+  padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-3);
+  border-left: 3px solid var(--danger);
+}
+.error-state__msg { color: var(--danger); font-weight: 500; }
+.error-state__hint { color: var(--ink-muted); font-size: 0.875rem; }
