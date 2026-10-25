@@ -44,3 +44,74 @@
 .detail-drawer__title { font-family: var(--font-serif); }
 .detail-drawer__price-main { font-family: var(--font-serif); font-size: 1.75rem; }
 .detail-drawer__desc { color: var(--ink-muted); line-height: 1.6; }
+
+.market-page__subtitle {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  margin-top: 4px;
+}
+
+.market-mobile-bar {
+  display: none;
+  margin-bottom: var(--sp-3);
+}
+
+@media (max-width: 600px) {
+  .market-mobile-bar {
+    display: block;
+  }
+  .market-filters {
+    display: none;
+    flex-direction: column;
+    padding: var(--sp-3);
+    background: var(--surface);
+    border-radius: var(--r-md);
+    margin-bottom: var(--sp-4);
+  }
+  .market-filters--open {
+    display: flex;
+  }
+}
+
+.market-filter-btn {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: var(--r-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.market-filters__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.listing-card__grade-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(58, 15, 52, 0.85);
+  color: var(--bg);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.listing-card__img-wrap {
+  position: relative;
+}
+
+.listing-card__clinic {
+  font-size: 0.76rem;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

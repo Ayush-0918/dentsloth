@@ -31,7 +31,7 @@ export function Dashboard() {
   }, [demoMode])
 
   const listingCount = data?.listings.length ?? 0
-  const medianS = data?.lazy_payoff?.measured_median_s ?? 38
+  const medianS = data?.lazy_payoff?.measured_median_s ?? 4.8
   const savedMin = listingCount * (manualMinutes - medianS / 60)
 
   const fmtTime = (iso: string) => {
