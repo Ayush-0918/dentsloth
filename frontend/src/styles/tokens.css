@@ -58,7 +58,6 @@
 }
 
 /* ── Dark theme ── */
-[data-theme="dark"],
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg:         #26092A;

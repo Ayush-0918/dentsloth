@@ -147,7 +147,7 @@ class TabPFNPricingAgent:
             except Exception as e:
                 logger.warning(f"TabPFN API mode initialization failed: {e}. Falling back to local.")
 
-        # Local mode
+        # Local mode (or lightweight production fallback if TabPFN/torch not installed)
         try:
             from tabpfn import TabPFNRegressor
             self.model = TabPFNRegressor(device="cpu", n_estimators=4)
@@ -155,8 +155,12 @@ class TabPFNPricingAgent:
             self._fitted = True
             logger.info("Fitted TabPFN locally on CPU successfully")
         except Exception as err:
-            logger.error(f"TabPFN local fit failed: {err}")
-            raise RuntimeError(f"TabPFN model cannot run locally: {err}") from err
+            logger.warning(f"TabPFN local model not available ({err}). Falling back to lightweight Ridge baseline for production resilience.")
+            from sklearn.linear_model import Ridge
+            self.model = Ridge()
+            self.model.fit(X, y)
+            self._fitted = True
+            logger.info("Fitted Ridge fallback pricing model successfully")
 
     def predict(
         self,

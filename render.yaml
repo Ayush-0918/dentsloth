@@ -1,19 +1,22 @@
-# render.yaml — DentSloth deployment blueprint for Render
+# render.yaml — DentSloth 100% Free Tier Deployment Blueprint for Render
 # https://docs.render.com/blueprint-spec
+# Note: Render Cron Jobs require a paid plan, so the cron service is omitted.
+# Nightly Sloth Run can be triggered on-demand via the /api/dashboard endpoint or GitHub Actions.
 
 services:
-  # ── FastAPI Backend ──────────────────────────────────────────────
+  # ── FastAPI Backend (Free 512 MB Web Service) ────────────────────
   - type: web
     name: dentsloth-api
     runtime: python
     plan: free
-    buildCommand: pip install -r backend/requirements.txt
+    buildCommand: pip install -r requirements-prod.txt
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
     envVars:
       - key: APP_ENV
         value: production
       - key: DEMO_MODE
-        sync: false             # Set in Render dashboard
+        value: "false"
       - key: LLM_PROVIDER
         value: hosted
       - key: GEMMA_API_KEY
@@ -23,21 +26,17 @@ services:
       - key: MONGODB_DB
         value: dentsloth
       - key: TABPFN_MODE
-        value: api              # CPU-only on Render free tier; use API
+        value: api              # CPU/RAM optimization: uses TabPFN Cloud API
       - key: TABPFN_API_KEY
         sync: false             # Secret: set in Render dashboard
-      - key: EMBED_PROVIDER
-        value: ollama            # Falls back to sentence-transformers if Ollama unavailable
-      - key: EMBED_MODEL
-        value: nomic-embed-text
       - key: CORS_ORIGINS
-        value: https://dentsloth.onrender.com,https://dentsloth.tech
+        value: https://dentsloth-web.onrender.com,https://dentsloth.onrender.com,https://dentsloth.tech
       - key: MAX_UPLOAD_MB
         value: 10
       - key: PYTHON_VERSION
         value: 3.12.0
 
-  # ── Static Frontend (Vite build) ────────────────────────────────
+  # ── Static Frontend (Free Static Site) ───────────────────────────
   - type: web
     name: dentsloth-web
     runtime: static
@@ -56,30 +55,3 @@ services:
         value: https://dentsloth-api.onrender.com/api
       - key: VITE_DEMO_MODE
         value: "false"
-
-  # ── Nightly Sloth Run (cron) ────────────────────────────────────
-  - type: cron
-    name: dentsloth-sloth-run
-    runtime: python
-    schedule: "0 1 * * *"          # 01:00 UTC daily (06:30 IST)
-    buildCommand: pip install -r backend/requirements.txt
-    startCommand: python scripts/sloth_run.py
-    envVars:
-      - key: DEMO_MODE
-        value: "false"
-      - key: LLM_PROVIDER
-        value: hosted
-      - key: GEMMA_API_KEY
-        sync: false
-      - key: MONGODB_URI
-        sync: false
-      - key: MONGODB_DB
-        value: dentsloth
-      - key: TABPFN_MODE
-        value: api
-      - key: TABPFN_API_KEY
-        sync: false
-      - key: EMBED_PROVIDER
-        value: ollama
-      - key: EMBED_MODEL
-        value: nomic-embed-text
