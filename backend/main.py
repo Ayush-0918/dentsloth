@@ -22,6 +22,17 @@ async def lifespan(app: FastAPI):
         logger.info("DB ping OK")
     else:
         logger.warning("DB not reachable – starting in degraded mode (OK for demo)")
+
+    # Auto-seed on startup if listings store is empty
+    try:
+        from .db import get_collection
+        col = get_collection("listings")
+        if col.count_documents() == 0:
+            logger.info("Listings store is empty; auto-seeding demo listings...")
+            from scripts.seed_demo_listings import seed
+            seed()
+    except Exception as e:
+        logger.warning(f"Auto-seed check encountered error: {e}")
     yield
     # Shutdown
     logger.info("DentSloth shutting down")

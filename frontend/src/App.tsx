@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { Nav } from './components/Nav'
+import { ServerStatusBanner } from './components/ServerStatusBanner'
 import { Landing } from './pages/Landing'
 import { SnapAndList } from './pages/SnapAndList'
 import { Marketplace } from './pages/Marketplace'
@@ -17,6 +18,7 @@ export function App() {
 
       <a href="#main-content" className="skip-link">Skip to main content</a>
 
+      <ServerStatusBanner />
       <Nav />
 
       <div className="app-content">

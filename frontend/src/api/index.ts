@@ -1,7 +1,23 @@
 export const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
-async function req<T>(method: string, path: string, body?: unknown, isForm = false): Promise<T> {
-  const opts: RequestInit = { method }
+export class ApiError extends Error {
+  status: number
+  isRefusal: boolean
+  code?: string
+
+  constructor(status: number, message: string, isRefusal = false) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+    this.isRefusal = isRefusal
+  }
+}
+
+async function req<T>(method: string, path: string, body?: unknown, isForm = false, timeoutMs = 45000): Promise<T> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+
+  const opts: RequestInit = { method, signal: controller.signal }
   if (body) {
     if (isForm) {
       opts.body = body as FormData
@@ -10,16 +26,57 @@ async function req<T>(method: string, path: string, body?: unknown, isForm = fal
       opts.body = JSON.stringify(body)
     }
   }
-  const res = await fetch(`${API_BASE}${path}`, opts)
+
+  let res: Response
+  try {
+    res = await fetch(`${API_BASE}${path}`, opts)
+  } catch (err: any) {
+    clearTimeout(timer)
+    if (err.name === 'AbortError') {
+      throw new ApiError(408, 'Request timed out after 45s. Free server may be waking up—please try again.')
+    }
+    throw new ApiError(0, 'Network connection failed. The free cloud server may be waking up (sleeping while idle).')
+  } finally {
+    clearTimeout(timer)
+  }
+
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: res.statusText }))
-    throw new Error(err.detail || `HTTP ${res.status}`)
+    const errData = await res.json().catch(() => ({ detail: res.statusText }))
+    const detail = errData.detail || `HTTP ${res.status}`
+
+    if (res.status === 413) {
+      throw new ApiError(413, 'Photo exceeds 10MB upload limit. Please upload a compressed or smaller image.')
+    }
+    if (res.status === 415) {
+      throw new ApiError(415, 'Unsupported file format. Please upload JPEG, PNG, or WebP.')
+    }
+    if (res.status === 422 || res.status === 400) {
+      const lower = detail.toLowerCase()
+      const isRefusal = lower.includes('refusal') || lower.includes('single-use') || lower.includes('confidence') || lower.includes('cannot be approved')
+      throw new ApiError(res.status, detail, isRefusal)
+    }
+    if (res.status === 429) {
+      throw new ApiError(429, 'Rate limit reached. Please wait a few seconds before retrying.')
+    }
+    if (res.status === 503) {
+      throw new ApiError(503, 'AI model service is currently unavailable. Please try again.')
+    }
+    throw new ApiError(res.status, detail)
   }
   return res.json()
 }
 
+export interface HealthResponse {
+  status: string
+  demo_mode: boolean
+  storage_backend?: string
+  matching_mode?: string
+  db: string
+  llm_provider: string
+}
+
 export const api = {
-  health: () => req<{ status: string; demo_mode: boolean; db: string; llm_provider: string }>('GET', '/health'.replace('/api', '').replace('//','/')),
+  health: () => req<HealthResponse>('GET', '/health', undefined, false, 8000),
   identify: (file: File) => {
     const fd = new FormData(); fd.append('file', file)
     return req<IdentifyResponse>('POST', '/identify', fd, true)
@@ -37,7 +94,7 @@ export const api = {
   getDashboard: () => req<DashboardData>('GET', '/dashboard'),
 }
 
-// ── Type stubs (will be expanded as backend phases complete) ──────────────────
+// ── Types ────────────────────────────────────────────────────────────────────
 export interface IdentifyResponse {
   items: IdentifiedItem[]
   notes?: string
@@ -59,7 +116,7 @@ export interface IdentifiedItem {
   id?: string
 }
 export interface PriceRequest { instrument_type: string; brand: string; condition_grade: string; age_years: number; original_price_inr?: number; sterilization_cycles_est?: number }
-export interface PriceResponse { suggested_price_inr: number; price_low: number; price_high: number; explanation: string }
+export interface PriceResponse { suggested_price_inr: number; price_low: number; price_high: number; explanation: string; original_price_inr?: number }
 export interface Listing {
   _id?: string
   instrument_type: string
