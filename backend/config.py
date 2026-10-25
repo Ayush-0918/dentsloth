@@ -27,6 +27,10 @@ class Settings(BaseSettings):
     tabpfn_mode: str = "local"
     tabpfn_api_key: str = ""
 
+    # Observability & Tracing (Sentry)
+    sentry_dsn: str = ""
+    enable_debug: bool = False
+
     # Embedding
     embed_provider: str = "ollama"
     embed_model: str = "nomic-embed-text"

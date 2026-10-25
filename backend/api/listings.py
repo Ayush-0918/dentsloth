@@ -10,6 +10,8 @@ from pydantic import BaseModel, Field
 
 from ..db import get_collection
 from ..config import get_settings
+from ..tracing import trace_transaction, trace_span
+from ..db import get_storage_backend
 from ..models import Listing, ListingStatus, ConditionGrade, Lifecycle, AgentEvent
 from ..llm.provider import get_llm_provider
 from ..pricing.tabpfn_model import get_pricing_agent
@@ -99,14 +101,26 @@ async def auto_create_listing(request: Request):
         if file and hasattr(file, "read"):
             content = await file.read()
             if content:
-                clean_bytes, mime = validate_and_strip_exif(content, getattr(file, "content_type", None))
-                provider = get_llm_provider()
-                id_res = await provider.identify(clean_bytes, mime, getattr(file, "filename", None))
-                if not id_res.can_list:
-                    raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail=id_res.refusal_reason or "Instrument could not be approved for listing.",
-                    )
+                with trace_span(name="image_sanitize", op="ai.sanitize") as s_san:
+                    clean_bytes, mime = validate_and_strip_exif(content, getattr(file, "content_type", None))
+                    s_san.set_attribute("exif_stripped", True)
+                    s_san.set_attribute("mime", mime)
+
+                with trace_span(name="gemma_identify", op="ai.inference") as s_id:
+                    provider = get_llm_provider()
+                    id_res = await provider.identify(clean_bytes, mime, getattr(file, "filename", None))
+                    s_id.set_attribute("provider", settings.llm_provider)
+                    s_id.set_attribute("can_list", id_res.can_list)
+                    s_id.set_attribute("cost", "0 for local; hosted per Google AI Studio free tier/quota")
+                    if id_res.items:
+                        s_id.set_attribute("confidence", id_res.items[0].confidence)
+                        s_id.set_attribute("instrument_type", id_res.items[0].instrument_type)
+                    if not id_res.can_list:
+                        s_id.set_attribute("refusal_reason", id_res.refusal_reason)
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=id_res.refusal_reason or "Instrument could not be approved for listing.",
+                        )
                 identified_items = id_res.items
 
         if not identified_items:
@@ -126,60 +140,76 @@ async def auto_create_listing(request: Request):
     pricing_agent = get_pricing_agent()
     created_drafts = []
 
-    for item in identified_items:
-        # Step 2: Price via TabPFN
-        price_res = pricing_agent.predict(
-            instrument_type=item.instrument_type,
-            brand=item.likely_brand,
-            condition_grade=item.condition_grade.value,
-            age_years=age_years,
-        )
+    with trace_transaction(name="lazy_listing", op="ai.agent") as parent_txn:
+        parent_txn.set_attribute("provider", settings.llm_provider)
+        parent_txn.set_attribute("demo_mode", settings.is_demo)
+        parent_txn.set_attribute("storage_backend", get_storage_backend())
 
-        name_en, name_hi = get_catalog_names(item.instrument_type)
-        brand_label = item.likely_brand if item.likely_brand != "unknown" else "Professional"
+        for item in identified_items:
+            # Span 1: TabPFN pricing
+            with trace_span(name="tabpfn_price", op="ai.pricing") as s_pr:
+                price_res = pricing_agent.predict(
+                    instrument_type=item.instrument_type,
+                    brand=item.likely_brand,
+                    condition_grade=item.condition_grade.value,
+                    age_years=age_years,
+                )
+                s_pr.set_attribute("mode", settings.tabpfn_mode)
+                s_pr.set_attribute("suggested_price_inr", price_res["suggested_price_inr"])
+                s_pr.set_attribute("price_range", f"₹{price_res['price_low']} - ₹{price_res['price_high']}")
+                s_pr.set_attribute("sanity_applied", True)
 
-        # Step 3: Bilingual listing generation
-        defects = ", ".join(item.visible_defects) if item.visible_defects else "No major structural defects"
-        desc_en = (
-            f"{brand_label} {name_en} (Grade {item.condition_grade.value}). "
-            f"Sterilization inspected: {defects}. Professional autoclave-ready stainless steel. "
-            f"{price_res['explanation']}"
-        )
-        desc_hi = (
-            f"{brand_label} {name_hi} (ग्रेड {item.condition_grade.value})। "
-            f"नैदानिक पुनः उपयोग हेतु जाँचा गया: {defects}। ऑटोकलेव के लिए सुरक्षित स्टेनलेस स्टील।"
-        )
+            name_en, name_hi = get_catalog_names(item.instrument_type)
+            brand_label = item.likely_brand if item.likely_brand != "unknown" else "Professional"
 
-        embed = compute_text_embedding(f"{name_en} {name_hi} {brand_label} {city}")
+            # Span 2: Bilingual listing synthesis
+            with trace_span(name="gemma_listing_text", op="ai.synthesis") as s_text:
+                defects = ", ".join(item.visible_defects) if item.visible_defects else "No major structural defects"
+                desc_en = (
+                    f"{brand_label} {name_en} (Grade {item.condition_grade.value}). "
+                    f"Sterilization inspected: {defects}. Professional autoclave-ready stainless steel. "
+                    f"{price_res['explanation']}"
+                )
+                desc_hi = (
+                    f"{brand_label} {name_hi} (ग्रेड {item.condition_grade.value})। "
+                    f"नैदानिक पुनः उपयोग हेतु जाँचा गया: {defects}। ऑटोकलेव के लिए सुरक्षित स्टेनलेस स्टील।"
+                )
+                s_text.set_attribute("languages", ["en", "hi"])
+                s_text.set_attribute("instrument", item.instrument_type)
 
-        suggested_val = float(suggested_price_override) if suggested_price_override is not None else price_res["suggested_price_inr"]
-        listing = Listing(
-            instrument_type=item.instrument_type,
-            brand=item.likely_brand,
-            condition_grade=item.condition_grade,
-            age_years=age_years,
-            original_price_inr=price_res["original_price_inr"],
-            suggested_price_inr=suggested_val,
-            price_low=price_res["price_low"],
-            price_high=price_res["price_high"],
-            description_en=desc_en,
-            description_hi=desc_hi,
-            clinic_name=clinic_name,
-            city=city,
-            status=ListingStatus.draft,
-            price_explanation=price_res["explanation"],
-            embedding=embed,
-            lifecycle=Lifecycle(
-                sterilization_cycles_est=int(round(age_years * 50)),
-                last_sharpened="Recently inspected",
-            ),
-        )
+            embed = compute_text_embedding(f"{name_en} {name_hi} {brand_label} {city}")
 
-        # Step 4: Save draft
-        res = get_collection("listings").insert_one(listing.model_dump())
-        listing_dict = listing.model_dump()
-        listing_dict["_id"] = res.inserted_id
-        created_drafts.append(listing_dict)
+            suggested_val = float(suggested_price_override) if suggested_price_override is not None else price_res["suggested_price_inr"]
+            listing = Listing(
+                instrument_type=item.instrument_type,
+                brand=item.likely_brand,
+                condition_grade=item.condition_grade,
+                age_years=age_years,
+                original_price_inr=price_res["original_price_inr"],
+                suggested_price_inr=suggested_val,
+                price_low=price_res["price_low"],
+                price_high=price_res["price_high"],
+                description_en=desc_en,
+                description_hi=desc_hi,
+                clinic_name=clinic_name,
+                city=city,
+                status=ListingStatus.draft,
+                price_explanation=price_res["explanation"],
+                embedding=embed,
+                lifecycle=Lifecycle(
+                    sterilization_cycles_est=int(round(age_years * 50)),
+                    last_sharpened="Recently inspected",
+                ),
+            )
+
+            # Span 3: DB write
+            with trace_span(name="db_write", op="db.insert") as s_db:
+                res = get_collection("listings").insert_one(listing.model_dump())
+                listing_dict = listing.model_dump()
+                listing_dict["_id"] = res.inserted_id
+                created_drafts.append(listing_dict)
+                s_db.set_attribute("storage_backend", get_storage_backend())
+                s_db.set_attribute("doc_id", str(res.inserted_id))
 
     latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)
     primary = created_drafts[0]
