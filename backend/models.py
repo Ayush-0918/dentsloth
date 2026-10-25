@@ -1,9 +1,9 @@
-"""Pydantic models for DentSloth collections."""
+"""Pydantic models for DentSloth collections and API schemas."""
 from __future__ import annotations
 from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel, Field
+from typing import Optional, List
 from enum import Enum
+from pydantic import BaseModel, Field
 
 
 class ConditionGrade(str, Enum):
@@ -22,6 +22,26 @@ class ListingStatus(str, Enum):
 class Lifecycle(BaseModel):
     sterilization_cycles_est: Optional[int] = None
     last_sharpened: Optional[str] = None   # freeform date string
+
+
+class IdentifiedItem(BaseModel):
+    instrument_type: str = Field(..., description="Standard instrument identifier or catalog name")
+    likely_brand: str = Field(default="unknown", description="Brand name if clearly identified, else unknown")
+    material: str = Field(default="stainless_steel", description="Material specification, e.g. stainless steel")
+    condition_grade: ConditionGrade = Field(default=ConditionGrade.B, description="Grade A, B, or C")
+    visible_defects: List[str] = Field(default_factory=list, description="List of visible flaws, handle wear, rust spots, etc.")
+    needs_sharpening: bool = Field(default=False, description="True if cutting edge/tip requires sharpening")
+    is_single_use: bool = Field(default=False, description="True if single-use disposable item")
+    confidence: float = Field(default=0.85, ge=0.0, le=1.0, description="Model confidence score (0.0 to 1.0)")
+
+
+class IdentifyResponse(BaseModel):
+    items: List[IdentifiedItem] = Field(default_factory=list, description="All identified instruments in the image")
+    notes: str = Field(default="", description="Clinical evaluation or identification notes")
+    can_list: bool = Field(default=True, description="False if guardrails fail (single-use or low confidence)")
+    refusal_reason: Optional[str] = Field(default=None, description="Human-readable reason for refusal")
+    demo: bool = Field(default=False, description="True if served from demo cache")
+    latency_ms: float = Field(default=0.0, description="Inference pipeline latency in milliseconds")
 
 
 class Listing(BaseModel):

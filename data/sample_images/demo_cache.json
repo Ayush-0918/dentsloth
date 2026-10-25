@@ -1,0 +1,143 @@
+{
+  "mouth_mirror_grade_a.jpg": {
+    "items": [
+      {
+        "instrument_type": "mouth_mirror",
+        "likely_brand": "Hu-Friedy",
+        "material": "stainless_steel",
+        "condition_grade": "A",
+        "visible_defects": [],
+        "needs_sharpening": false,
+        "is_single_use": false,
+        "confidence": 0.94
+      }
+    ],
+    "notes": "Hu-Friedy #5 front surface dental mirror. Pristine mirror glass, intact reflective coating, flawless ergonomic handle."
+  },
+  "gracey_curette_grade_b.jpg": {
+    "items": [
+      {
+        "instrument_type": "gracey_curette",
+        "likely_brand": "Hu-Friedy",
+        "material": "stainless_steel",
+        "condition_grade": "B",
+        "visible_defects": [
+          "Minor surface abrasion on shank",
+          "Standard handle wear"
+        ],
+        "needs_sharpening": false,
+        "is_single_use": false,
+        "confidence": 0.91
+      }
+    ],
+    "notes": "Hu-Friedy Gracey 13/14 area-specific periodontal curette. Intact cutting edge, standard autoclave markings."
+  },
+  "sickle_scaler_grade_c.jpg": {
+    "items": [
+      {
+        "instrument_type": "sickle_scaler",
+        "likely_brand": "unknown",
+        "material": "stainless_steel",
+        "condition_grade": "C",
+        "visible_defects": [
+          "Blunted cutting blade",
+          "Micro-pitting on working tip",
+          "Discoloration near neck"
+        ],
+        "needs_sharpening": true,
+        "is_single_use": false,
+        "confidence": 0.86
+      }
+    ],
+    "notes": "Posterior sickle scaler 204S. Working tip exhibits significant wear and requires professional re-sharpening before clinical use."
+  },
+  "tray_instruments_multi.jpg": {
+    "items": [
+      {
+        "instrument_type": "mouth_mirror",
+        "likely_brand": "Hu-Friedy",
+        "material": "stainless_steel",
+        "condition_grade": "A",
+        "visible_defects": [],
+        "needs_sharpening": false,
+        "is_single_use": false,
+        "confidence": 0.93
+      },
+      {
+        "instrument_type": "dental_probe",
+        "likely_brand": "Hu-Friedy",
+        "material": "stainless_steel",
+        "condition_grade": "A",
+        "visible_defects": [],
+        "needs_sharpening": false,
+        "is_single_use": false,
+        "confidence": 0.92
+      },
+      {
+        "instrument_type": "college_tweezers",
+        "likely_brand": "unknown",
+        "material": "stainless_steel",
+        "condition_grade": "B",
+        "visible_defects": [
+          "Light handle friction marks"
+        ],
+        "needs_sharpening": false,
+        "is_single_use": false,
+        "confidence": 0.89
+      }
+    ],
+    "notes": "Sterilization cassette tray containing 3-piece diagnostic kit: Mouth Mirror, #23 Explorer Probe, and Cotton Pliers."
+  },
+  "disposable_needle_syringe.jpg": {
+    "items": [
+      {
+        "instrument_type": "disposable_dental_needle",
+        "likely_brand": "Septodont",
+        "material": "plastic_and_stainless_steel",
+        "condition_grade": "A",
+        "visible_defects": [],
+        "needs_sharpening": false,
+        "is_single_use": true,
+        "confidence": 0.96
+      }
+    ],
+    "notes": "Single-use disposable 27G long infiltration needle with plastic sheath. Non-reusable biohazard item."
+  },
+  "blurry_unknown_object.jpg": {
+    "items": [
+      {
+        "instrument_type": "unidentified_object",
+        "likely_brand": "unknown",
+        "material": "unknown",
+        "condition_grade": "C",
+        "visible_defects": [
+          "Severe motion blur",
+          "Insufficient contrast",
+          "Unidentifiable silhouette"
+        ],
+        "needs_sharpening": false,
+        "is_single_use": false,
+        "confidence": 0.28
+      }
+    ],
+    "notes": "Low confidence evaluation: image resolution is degraded with high motion blur. Unable to determine diagnostic instrument boundaries."
+  },
+  "straight_elevator_grade_b.jpg": {
+    "items": [
+      {
+        "instrument_type": "straight_elevator",
+        "likely_brand": "GDC",
+        "material": "stainless_steel",
+        "condition_grade": "B",
+        "visible_defects": [
+          "Light handle scratches",
+          "Clean blade"
+        ],
+        "needs_sharpening": false,
+        "is_single_use": false,
+        "confidence": 0.9
+      }
+    ],
+    "notes": "GDC straight Coupland elevator #1. Sturdy pear-shaped handle, sharp working gouge blade, minor cosmetic scuffs."
+  }
+}

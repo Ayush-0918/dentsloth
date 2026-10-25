@@ -4,7 +4,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import get_settings
-from .db import get_db
+from .db import ping_db
+from .api import identify
 
 logging.basicConfig(level=get_settings().log_level)
 logger = logging.getLogger(__name__)
@@ -15,7 +16,6 @@ async def lifespan(app: FastAPI):
     # Startup
     settings = get_settings()
     logger.info(f"DentSloth starting | env={settings.app_env} demo_mode={settings.is_demo}")
-    from .db import ping_db
     if ping_db():
         logger.info("DB ping OK")
     else:
@@ -45,7 +45,6 @@ app.add_middleware(
 @app.get("/health", tags=["meta"])
 async def health():
     """Health check endpoint."""
-    from .db import ping_db
     db_ok = ping_db()
     return {
         "status": "ok",
@@ -55,9 +54,10 @@ async def health():
     }
 
 
-# Routers will be registered here in subsequent phases
-# from .api import identify, price, listings, wishlist, kit
-# app.include_router(identify.router, prefix="/api")
+# Register routers
+app.include_router(identify.router, prefix="/api")
+# Routers to be wired in subsequent phases:
+# from .api import price, listings, wishlist, kit
 # app.include_router(price.router, prefix="/api")
 # app.include_router(listings.router, prefix="/api")
 # app.include_router(wishlist.router, prefix="/api")
