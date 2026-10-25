@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import get_settings
 from .db import ping_db
-from .api import identify
+from .api import identify, price, listings, wishlist, kit, dashboard
 
 logging.basicConfig(level=get_settings().log_level)
 logger = logging.getLogger(__name__)
@@ -43,6 +43,7 @@ app.add_middleware(
 
 
 @app.get("/health", tags=["meta"])
+@app.get("/api/health", tags=["meta"])
 async def health():
     """Health check endpoint."""
     db_ok = ping_db()
@@ -56,9 +57,8 @@ async def health():
 
 # Register routers
 app.include_router(identify.router, prefix="/api")
-# Routers to be wired in subsequent phases:
-# from .api import price, listings, wishlist, kit
-# app.include_router(price.router, prefix="/api")
-# app.include_router(listings.router, prefix="/api")
-# app.include_router(wishlist.router, prefix="/api")
-# app.include_router(kit.router, prefix="/api")
+app.include_router(price.router, prefix="/api")
+app.include_router(listings.router, prefix="/api")
+app.include_router(wishlist.router, prefix="/api")
+app.include_router(kit.router, prefix="/api")
+app.include_router(dashboard.router, prefix="/api")
