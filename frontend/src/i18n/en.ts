@@ -11,22 +11,22 @@ export const en = {
 
   // Landing
   hero_headline: "Snap it. The sloth does the rest.",
-  hero_sub: "Resell used dental instruments without the chore — one photo, instant listing, overnight matches.",
+  hero_sub: "Resell used dental instruments without the chore — one photo, instant listing, automated matches.",
   hero_cta_sell: "I'm selling",
   hero_cta_buy: "I'm setting up a clinic",
   how_title: "How it works",
   how_step1_title: "Snap",
   how_step1_body: "Take one photo of the instrument on a plain background.",
   how_step2_title: "The sloth prices & writes it",
-  how_step2_body: "Open AI identifies, grades, prices and writes a bilingual listing — in seconds.",
+  how_step2_body: "Open models identify, grade, price and write a bilingual listing, in seconds.",
   how_step3_title: "Wake up to matches",
-  how_step3_body: "The overnight Sloth Run matches your listing with buyers while you sleep.",
+  how_step3_body: "The Sloth Run matches your listing with buyers' wishlists and leaves a morning summary.",
   why_open_title: "Why open models?",
   why_open_1: "Runs on your own machine — photos never leave your clinic.",
   why_open_2: "Works without internet in local mode.",
   why_open_3: "No per-photo API cost. Models are swappable.",
   synthetic_notice: "Demo data is synthetic. Prices are suggestions, not valuations.",
-  footer_open: "Open models: Gemma, TabPFN. Data stays local in local mode.",
+  footer_open: "Open models: Gemma, TabPFN. Local mode keeps photos on your machine. The hosted demo uses hosted Gemma and TabPFN API.",
 
   // Snap & List
   snap_title: "Snap & List",
@@ -103,7 +103,7 @@ export const en = {
   dash_payoff_note: "ESTIMATE – see /docs/lazy_payoff.md for methodology",
   dash_payoff_empty: "List at least one instrument to see your payoff estimate.",
   dash_notifications: "Simulated notifications",
-  dash_notifications_note: "No real messages are sent. This shows what the Overnight Sloth Run would notify.",
+  dash_notifications_note: "No real messages are sent. This shows what the Sloth Run would notify.",
   dash_no_listings: "No listings yet. Snap your first instrument!",
   dash_no_matches: "No new matches since last run.",
 

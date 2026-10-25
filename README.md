@@ -1,6 +1,6 @@
 # 🦥 DentSloth
 
-> **Snap one photo of a used dental instrument. DentSloth identifies it, grades it, prices it fairly, writes the listing (English + Hindi), and while you sleep it finds a buyer.**
+> **Snap one photo of a used dental instrument. DentSloth identifies it, grades it, prices it fairly, writes the listing (English + Hindi), and matches it with buyers' wishlists.**
 
 Built for the **DEV Hacktoberfest Open-Source AI Challenge – Week 3: Slow and Steady** (theme: open-weight AI that rewards laziness — it does the work so you don't have to).
 
