@@ -1,6 +1,5 @@
 # render.yaml — DentSloth 100% Free Tier Deployment Blueprint for Render
 # Schema: https://docs.render.com/blueprint-spec
-# Free Tier: Exactly 2 free services (Web Service + Static Site). No card required.
 
 services:
   # ── 1. FastAPI Backend (Free Web Service) ─────────────────────────
@@ -43,9 +42,9 @@ services:
   - type: web
     name: dentsloth-web
     runtime: static
-    plan: free
-    buildCommand: cd frontend && npm ci && npm run build
-    staticPublishPath: frontend/dist
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
     headers:
       - path: /*
         name: Cache-Control
