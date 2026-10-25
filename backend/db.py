@@ -159,6 +159,15 @@ class LocalCollection:
             conn.commit()
         return True
 
+    def delete_many(self, filter_dict: Optional[dict] = None) -> int:
+        filter_dict = filter_dict or {}
+        items = list(self.find(filter_dict))
+        count = 0
+        for it in items:
+            if self.delete_one({"_id": it["_id"]}):
+                count += 1
+        return count
+
 
 def get_client() -> Optional[MongoClient]:
     global _mongo_client
@@ -203,3 +212,11 @@ def get_collection(name: str):
             _use_fallback = True
 
     return LocalCollection(name)
+
+
+def get_storage_backend() -> str:
+    """Returns 'atlas' if connected to MongoDB Atlas cluster, else 'sqlite'."""
+    global _use_fallback
+    if _use_fallback is None:
+        ping_db()
+    return "sqlite" if _use_fallback else "atlas"

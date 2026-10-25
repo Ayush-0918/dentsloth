@@ -154,6 +154,15 @@ Never display these numbers as real market statistics.
 
 ---
 
+
+### MongoDB Atlas & Vector Search
+- **Data Collections:** `listings`, `wishlists`, `kits`, `events`.
+- **Health Verification:** `GET /health` returns `storage_backend: "atlas"` in production and `"sqlite"` in local/offline fallback.
+- **Vector Search:** Automatic `$vectorSearch` with fallback to in-memory cosine similarity if index is building.
+- **Index Definition:** `scripts/atlas_index.json` (64 dimensions, cosine similarity).
+- **Index Automation:** Run `python scripts/create_vector_index.py` or use Atlas UI.
+- **Demo Seed:** Run `python scripts/seed_demo_listings.py` to seed 10 synthetic listings with vector embeddings.
+
 ## Why Open?
 
 - **Privacy**: Local Gemma means clinic photos never leave the clinic's machine.

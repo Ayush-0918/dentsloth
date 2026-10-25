@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import get_settings
-from .db import ping_db
+from .db import ping_db, get_storage_backend
 from .api import identify, price, listings, wishlist, kit, dashboard
 
 logging.basicConfig(level=get_settings().log_level)
@@ -47,10 +47,15 @@ app.add_middleware(
 async def health():
     """Health check endpoint."""
     db_ok = ping_db()
+    storage_type = get_storage_backend()
+    from .matching.matcher import check_atlas_vector_search_ready
+    vector_ready = check_atlas_vector_search_ready()
     return {
         "status": "ok",
         "demo_mode": settings.is_demo,
         "db": "ok" if db_ok else "degraded",
+        "storage_backend": storage_type,
+        "matching_mode": "atlas" if vector_ready else "in_memory_cosine",
         "llm_provider": settings.llm_provider,
     }
 

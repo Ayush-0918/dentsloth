@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
-from backend.db import get_collection
+from backend.db import get_collection, get_storage_backend
 from backend.models import AgentEvent
 
 logging.basicConfig(level=logging.INFO)
@@ -35,6 +35,7 @@ def cosine_similarity(v1: list[float], v2: list[float]) -> float:
 def run_sloth():
     print("=" * 75)
     print(" 🦥 DentSloth Overnight Sloth Run Starting")
+    print(f" Data Storage Backend: {get_storage_backend()}")
     print("=" * 75)
 
     listings_coll = get_collection("listings")

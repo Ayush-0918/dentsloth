@@ -69,6 +69,15 @@ Evaluated via `scripts/eval_pricing.py` using a deterministic 80/20 train/test s
 
 ---
 
+
+
+### MongoDB Atlas & Vector Search Verified Details
+* **Collections on Atlas:** `listings`, `wishlists`, `kits`, `events`.
+* **Health Verification:** `GET /api/health` exposes `storage_backend` (`"atlas"` or `"sqlite"`) and `matching_mode` (`"atlas"` or `"in_memory_cosine"`).
+* **Atlas Vector Index:** Defined in `scripts/atlas_index.json` (64 dimensions, cosine metric) on collection `listings`, path `embedding`. Initialized via `scripts/create_vector_index.py`.
+* **Zero-Downtime Fallback:** If the Atlas cluster is unreachable or vector index is not ready, queries transparently fall back to thread-safe local SQLite and in-memory cosine similarity.
+* **Seeded Demo Listings:** `scripts/seed_demo_listings.py` seeds 10 illustrative synthetic clinic listings pre-computed with 64-dim vectors.
+
 ## 4. Honest Disclosures: Synthetic & Demo Elements
 
 1. **`data/price_history.csv`:** Synthetic clinical sales dataset containing 601 records generated using real clinical depreciation curves and realistic noise. **Labeled as illustrative synthetic data.** The MAE/MAPE figures in §2 are measured on this synthetic data.
