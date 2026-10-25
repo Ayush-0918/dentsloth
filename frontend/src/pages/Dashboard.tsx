@@ -43,6 +43,7 @@ export function Dashboard() {
     <main className="dash-page page-wrap" id="main-content">
       <div className="dash-page__header">
         <h1>{t('dash_title')}</h1>
+        <Badge label={t('synthetic_badge') || 'Demo data is synthetic'} variant="synthetic" />
         {demoMode && <Badge label={t('demo_mode_badge')} />}
       </div>
 

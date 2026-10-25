@@ -67,6 +67,7 @@ export function KitBuilder() {
     <main className="kit-page page-wrap" id="main-content">
       <div className="kit-page__header">
         <h1>{t('kit_title')}</h1>
+        <Badge label={t('synthetic_badge') || 'Demo data is synthetic'} variant="synthetic" />
         {demoMode && <Badge label={t('demo_mode_badge')} />}
       </div>
 
