@@ -1,7 +1,7 @@
 # render.yaml — DentSloth 100% Free Tier Deployment Blueprint for Render
 # https://docs.render.com/blueprint-spec
 # Note: Render Cron Jobs require a paid plan, so the cron service is omitted.
-# Nightly Sloth Run can be triggered on-demand via the /api/dashboard endpoint or GitHub Actions.
+# Nightly Sloth Run can be triggered on-demand via /api/dashboard or GitHub Actions.
 
 services:
   # ── FastAPI Backend (Free 512 MB Web Service) ────────────────────
@@ -29,6 +29,10 @@ services:
         value: api              # CPU/RAM optimization: uses TabPFN Cloud API
       - key: TABPFN_API_KEY
         sync: false             # Secret: set in Render dashboard
+      - key: SENTRY_DSN
+        sync: false             # Secret: set in Render dashboard
+      - key: ENABLE_DEBUG
+        value: "false"          # Toggle to "true" to test /api/debug/trace-test
       - key: CORS_ORIGINS
         value: https://dentsloth-web.onrender.com,https://dentsloth.onrender.com,https://dentsloth.tech
       - key: MAX_UPLOAD_MB
