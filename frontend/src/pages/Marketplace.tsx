@@ -1,3 +1,4 @@
+import { API_BASE } from '../api'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useT } from '../hooks/useT'
@@ -39,7 +40,7 @@ export function Marketplace() {
       setTimeout(() => { setListings(DEMO_LISTINGS); setLoading(false) }, 600)
       return
     }
-    fetch('/api/listings').then(r => r.json()).then(d => {
+    fetch(`${API_BASE}/listings`).then(r => r.json()).then(d => {
       setListings(d.listings ?? []); setLoading(false)
     }).catch(() => { setListings(DEMO_LISTINGS); setLoading(false) })
   }, [demoMode])

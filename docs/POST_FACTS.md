@@ -17,14 +17,18 @@ Measured via `scripts/measure_lazy_payoff.py` executing 10 consecutive end-to-en
 * **Cold Start (Run 01):** 7.21 seconds
 * **Fastest Run:** 4.81 seconds
 * **Slowest Run:** 7.21 seconds
-* **Manual Listing Baseline:** ~8 minutes (480 seconds) typical clinic administrative research, catalog verification, price discovery, and translation.
-* **Net Measured Time Saved:** **~475 seconds per instrument (99.3x faster)**.
+* **Manual Listing Baseline:** `MANUAL_TIME_TO_BE_MEASURED_BY_USER` — replace with your own timed result before citing.
+* **Net Measured Time Saved:** Difference between user-measured manual time and the 4.83 s median.
+
+> **Note:** The pipeline timing numbers above were measured with `DEMO_MODE=false` using real Gemma 3 4B inference via Ollama. The ~480 s / "99.3× faster" claim from earlier drafts was based on an un-timed estimate and has been removed.
 
 ---
 
 ## 2. Real TabPFN Resale Pricing Agent Accuracy
 
 Evaluated via `scripts/eval_pricing.py` using a deterministic 80/20 train/test split on `data/price_history.csv` (120 hold-out evaluation samples completely unseen during prior fitting).
+
+> **⚠ Synthetic Training Data:** `price_history.csv` is a synthetic dataset of ~601 records generated with realistic clinical depreciation curves and noise (`scripts/generate_seed_prices.py`). The MAE/MAPE figures below reflect model accuracy on this synthetic data only. Real-world accuracy will depend on real sales records.
 
 ### Overall Model Benchmark
 | Architecture | Mean Absolute Error (MAE) | MAPE (%) | R² Score | Note |
@@ -67,11 +71,12 @@ Evaluated via `scripts/eval_pricing.py` using a deterministic 80/20 train/test s
 
 ## 4. Honest Disclosures: Synthetic & Demo Elements
 
-1. **`data/price_history.csv`:** Synthetic clinical sales dataset containing 601 records generated using real clinical depreciation curves and realistic noise. **Labeled as illustrative synthetic data.**
+1. **`data/price_history.csv`:** Synthetic clinical sales dataset containing 601 records generated using real clinical depreciation curves and realistic noise. **Labeled as illustrative synthetic data.** The MAE/MAPE figures in §2 are measured on this synthetic data.
 2. **`data/instrument_catalog.json`:** Curated catalog of ~40 common dental instruments with representative retail price bounds.
 3. **Clinic & Seller Names:** Fictional illustrative clinic names (e.g. *Sunrise Dental Clinic, Lakeview Polyclinic*).
 4. **Notifications:** Sloth Run notifications are logged to the `events` collection and displayed on the morning dashboard. Physical SMS/WhatsApp gateways are mocked for hackathon testing.
 5. **EXIF Privacy:** Uploaded photos have all EXIF and GPS geolocation metadata stripped before being processed by any model.
+6. **Manual Baseline:** The manual listing time has **not** been independently measured. The placeholder `MANUAL_TIME_TO_BE_MEASURED_BY_USER` should be replaced with a real timed benchmark before any comparative claims are made.
 
 ---
 
@@ -81,7 +86,7 @@ Evaluated via `scripts/eval_pricing.py` using a deterministic 80/20 train/test s
 * **Low-Confidence Guardrail:** Photos with <0.40 model confidence trigger a clear refusal screen requesting a retake on a plain background.
 * **Clean Background Requirement:** Gemma vision performs best when instruments are photographed on a neutral dental tray or plain cloth.
 * **TabPFN Non-Commercial License:** TabPFN weights are distributed under non-commercial research terms; commercial production deployment requires licensing from Prior Labs.
-* **Subagent Sandboxing:** In isolated CI/sandbox containers without Playwright driver mirrors, headless Google Chrome native binary (`/Applications/Google Chrome.app`) was used to render and capture authentic 390px mobile viewport screenshots.
+* **Synthetic Data Only:** All pricing accuracy metrics are benchmarked on synthetic data. Real-world accuracy will vary with actual sales data.
 
 ---
 

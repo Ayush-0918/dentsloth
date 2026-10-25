@@ -1,3 +1,4 @@
+import { API_BASE } from '../api'
 import { useState, useRef, useCallback, type DragEvent, type ChangeEvent } from 'react'
 import { useT } from '../hooks/useT'
 import { useApp } from '../context/AppContext'
@@ -61,7 +62,7 @@ export function SnapAndList() {
 
       if (!demoMode) {
         const fd = new FormData(); fd.append('file', file)
-        const res = await fetch('/api/identify', { method: 'POST', body: fd })
+        const res = await fetch(`${API_BASE}/identify`, { method: 'POST', body: fd })
         if (!res.ok) throw new Error((await res.json()).detail || 'Identify failed')
         result = await res.json()
       } else {
@@ -84,7 +85,7 @@ export function SnapAndList() {
       for (const it of result.items) {
         if (!it.price && !demoMode) {
           try {
-            const pRes = await fetch('/api/price', {
+            const pRes = await fetch(`${API_BASE}/price`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -144,7 +145,7 @@ export function SnapAndList() {
   const handlePublish = async () => {
     const item = items[selectedIdx]
     try {
-      const res = await fetch('/api/listings/auto', {
+      const res = await fetch(`${API_BASE}/listings/auto`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -155,7 +156,7 @@ export function SnapAndList() {
       if (!res.ok) throw new Error('Publish failed')
       const created = await res.json()
       if (created.id) {
-        await fetch(`/api/listings/${created.id}/publish`, { method: 'POST' })
+        await fetch(`${API_BASE}/listings/${created.id}/publish`, { method: 'POST' })
       }
       setFlowState('published')
     } catch (err: unknown) {

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import { type Lang, setLang as setI18nLang, getLang } from '../i18n'
+import { API_BASE } from '../api'
 
 interface AppCtx {
   lang: Lang
@@ -21,7 +22,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [demoMode, setDemoMode] = useState<boolean>(import.meta.env.VITE_DEMO_MODE === 'true')
 
   useEffect(() => {
-    fetch('/api/health')
+    fetch(`${API_BASE}/health`)
       .then(r => r.json())
       .then(d => {
         if (typeof d.demo_mode === 'boolean') {

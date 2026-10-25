@@ -1,3 +1,4 @@
+import { API_BASE } from '../api'
 import { useState, useEffect } from 'react'
 import { useT } from '../hooks/useT'
 import { useApp } from '../context/AppContext'
@@ -24,7 +25,7 @@ export function Dashboard() {
       setTimeout(() => { setData(DEMO_DASHBOARD); setLoading(false) }, 700)
       return
     }
-    fetch('/api/dashboard').then(r => r.json()).then(d => {
+    fetch(`${API_BASE}/dashboard`).then(r => r.json()).then(d => {
       setData(d); setLoading(false)
     }).catch(() => { setData(DEMO_DASHBOARD); setLoading(false) })
   }, [demoMode])

@@ -1,3 +1,4 @@
+import { API_BASE } from '../api'
 import { useState } from 'react'
 import { useT } from '../hooks/useT'
 import { useApp } from '../context/AppContext'
@@ -33,7 +34,7 @@ export function KitBuilder() {
         await new Promise(r => setTimeout(r, 1500))
         setResult(DEMO_KIT)
       } else {
-        const res = await fetch('/api/kit', {
+        const res = await fetch(`${API_BASE}/kit`, {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ request, budget }),

@@ -1,0 +1,85 @@
+# render.yaml — DentSloth deployment blueprint for Render
+# https://docs.render.com/blueprint-spec
+
+services:
+  # ── FastAPI Backend ──────────────────────────────────────────────
+  - type: web
+    name: dentsloth-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEMO_MODE
+        sync: false             # Set in Render dashboard
+      - key: LLM_PROVIDER
+        value: hosted
+      - key: GEMMA_API_KEY
+        sync: false             # Secret: set in Render dashboard
+      - key: MONGODB_URI
+        sync: false             # Secret: set in Render dashboard
+      - key: MONGODB_DB
+        value: dentsloth
+      - key: TABPFN_MODE
+        value: api              # CPU-only on Render free tier; use API
+      - key: TABPFN_API_KEY
+        sync: false             # Secret: set in Render dashboard
+      - key: EMBED_PROVIDER
+        value: ollama            # Falls back to sentence-transformers if Ollama unavailable
+      - key: EMBED_MODEL
+        value: nomic-embed-text
+      - key: CORS_ORIGINS
+        value: https://dentsloth.onrender.com,https://dentsloth.tech
+      - key: MAX_UPLOAD_MB
+        value: 10
+      - key: PYTHON_VERSION
+        value: 3.12.0
+
+  # ── Static Frontend (Vite build) ────────────────────────────────
+  - type: web
+    name: dentsloth-web
+    runtime: static
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: frontend/dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://dentsloth-api.onrender.com/api
+      - key: VITE_DEMO_MODE
+        value: "false"
+
+  # ── Nightly Sloth Run (cron) ────────────────────────────────────
+  - type: cron
+    name: dentsloth-sloth-run
+    runtime: python
+    schedule: "0 1 * * *"          # 01:00 UTC daily (06:30 IST)
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python scripts/sloth_run.py
+    envVars:
+      - key: DEMO_MODE
+        value: "false"
+      - key: LLM_PROVIDER
+        value: hosted
+      - key: GEMMA_API_KEY
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        value: dentsloth
+      - key: TABPFN_MODE
+        value: api
+      - key: TABPFN_API_KEY
+        sync: false
+      - key: EMBED_PROVIDER
+        value: ollama
+      - key: EMBED_MODEL
+        value: nomic-embed-text

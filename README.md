@@ -13,10 +13,10 @@ New dental instruments are expensive; young dentists and new clinics struggle to
 ## Two Lazy Loops
 
 ### 1 · Seller Loop (lazy listing)
-Photo → Gemma vision identifies instrument(s) → TabPFN predicts fair price → Gemma writes bilingual listing → saved to MongoDB with embeddings → published.
+Photo → Gemma 3 4B vision identifies instrument(s) → TabPFN predicts fair price → Gemma writes bilingual listing → saved to MongoDB with embeddings → published.
 
 ### 2 · Buyer Loop (Starter Kit Builder)
-New dentist types plain words: *"opening a general practice, budget ₹60k, need basic exam + scaling + extraction set"* → Gemma parses intent → vector search retrieves best listings → greedy budget kit assembled → gaps added to wishlist.
+New dentist types plain words: *"opening a general practice, budget ₹60k, need basic exam + scaling + extraction set"* → vector search retrieves best listings → greedy budget kit assembled → gaps added to wishlist.
 
 **Overnight Sloth Run**: nightly cron matches new listings with wishlists, leaves each user a 2-line morning summary.
 
@@ -35,25 +35,39 @@ New dentist types plain words: *"opening a general practice, budget ₹60k, need
 
 ---
 
-## Partner Technologies
+## Architecture
 
-- **Gemma** – open-weight vision + language backbone
-- **TabPFN** – tabular price prediction
-- **MongoDB Atlas** + Atlas Vector Search – listings, wishlists, semantic matching
-- **Render** – API + static frontend + nightly Sloth Run cron
-- **.tech domain** – `dentsloth.tech`
+```
+frontend/       React · Vite · TypeScript · CSS design tokens
+  src/pages/    SnapAndList, Marketplace, KitBuilder, Dashboard, Landing
+  src/api/      Typed API client with VITE_API_URL env var
+backend/        Python · FastAPI · Pydantic v2
+  api/          identify, price, listings, wishlist, kit, dashboard
+  llm/          OllamaProvider / HostedGemmaProvider (switchable)
+  pricing/      TabPFN 2.2.1 with sanity rules (85% cap, ₹50 floor)
+  db.py         MongoDB Atlas with seamless SQLite fallback
+scripts/        eval_pricing, measure_lazy_payoff, sloth_run, seed
+data/           Synthetic catalog + price history CSV + sample images
+docs/           POST_FACTS, lazy_payoff, architecture, screenshots
+```
+
+### Data Flow
+
+```
+Photo → EXIF strip → Gemma vision → TabPFN pricing → Bilingual text → DB → Published
+                                                                        ↓
+Wishlist ←→ Embedding match (cosine) ← Nightly Sloth Run → Morning Summary
+```
 
 ---
 
-## Stack
+## Partner Technologies
 
-```
-backend/    Python · FastAPI · Pydantic v2 · pymongo
-frontend/   React · Vite · TypeScript
-data/       Synthetic catalog + price history CSV
-scripts/    Seed, eval, sloth run, measurement
-docs/       Architecture, demo script, screenshots list
-```
+- **Gemma** – open-weight vision + language backbone
+- **TabPFN** – tabular price prediction (Prior Labs)
+- **MongoDB Atlas** + Atlas Vector Search – listings, wishlists, semantic matching
+- **Render** – API + static frontend + nightly Sloth Run cron
+- **.tech domain** – `dentsloth.tech`
 
 ---
 
@@ -67,34 +81,29 @@ docs/       Architecture, demo script, screenshots list
 
 ```bash
 # 1. Clone and configure
-git clone https://github.com/your-handle/dentsloth
+git clone https://github.com/<your-handle>/dentsloth.git
 cd dentsloth
 cp .env.example .env
-# Edit .env: set MONGODB_URI and OLLAMA_BASE_URL
+# Edit .env: set MONGODB_URI, OLLAMA_BASE_URL, etc.
 
 # 2. Pull models
 ollama pull gemma3:4b
 ollama pull nomic-embed-text
 
-# 3. Install backend deps
-cd backend && pip install -r requirements.txt && cd ..
+# 3. Set up Python virtualenv
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r backend/requirements.txt
 
-# 4. Generate synthetic data and seed demo listings
+# 4. Generate synthetic data
 python scripts/generate_seed_prices.py
-python scripts/seed_demo_listings.py
 
-# 5. Start backend (new terminal)
+# 5. Start backend (terminal 1)
 uvicorn backend.main:app --reload --port 8000
 
-# 6. Install and start frontend (new terminal)
+# 6. Start frontend (terminal 2)
 cd frontend && npm install && npm run dev
 
 # 7. Open http://localhost:5173
-```
-
-**One-command shortcut** (requires make + two terminals):
-```bash
-make install && make seed && make dev
 ```
 
 ---
@@ -108,7 +117,26 @@ See [`.env.example`](.env.example) for all variables. Key ones:
 | `DEMO_MODE` | `true` | Use pre-recorded model outputs (safe for demos) |
 | `LLM_PROVIDER` | `ollama` | `ollama` (local) or `hosted` (AI Studio) |
 | `MONGODB_URI` | localhost | Atlas connection string |
-| `TABPFN_MODE` | `local` | `local` or `api` |
+| `TABPFN_MODE` | `local` | `local` or `api` (use `api` on Render) |
+| `TABPFN_API_KEY` | — | Prior Labs API key (only if `TABPFN_MODE=api`) |
+| `GEMMA_API_KEY` | — | Google AI Studio key (only if `LLM_PROVIDER=hosted`) |
+| `CORS_ORIGINS` | `http://localhost:5173` | Comma-separated allowed origins |
+| `VITE_API_URL` | `/api` | Frontend env var for API base URL (production: full URL) |
+| `VITE_DEMO_MODE` | — | Frontend env var to pre-set demo mode |
+
+---
+
+## Deployment (Render)
+
+A [`render.yaml`](render.yaml) blueprint is included:
+
+1. **dentsloth-api** — FastAPI web service (`LLM_PROVIDER=hosted`, `TABPFN_MODE=api`)
+2. **dentsloth-web** — Static frontend (Vite build, `VITE_API_URL` set to API domain)
+3. **dentsloth-sloth-run** — Nightly cron for matching + morning summaries
+
+Set secrets (`GEMMA_API_KEY`, `MONGODB_URI`, `TABPFN_API_KEY`) in the Render dashboard — they are never committed.
+
+> **TabPFN on Render:** The free tier has 512 MB RAM. TabPFN + PyTorch may exceed this. Use `TABPFN_MODE=api` for production and document the `TABPFN_API_KEY` env var in Render.
 
 ---
 
@@ -116,10 +144,11 @@ See [`.env.example`](.env.example) for all variables. Key ones:
 
 > ⚠️ **All data in this repository is SYNTHETIC and ILLUSTRATIVE.**
 
-- `data/instrument_catalog.json` — ~40 common dental instruments with **illustrative** price ranges. Not real market data.
-- `data/price_history.csv` — ~600 synthetic sale records generated by `scripts/generate_seed_prices.py` with realistic depreciation curves and noise. **Not real sales data.**
+- `data/instrument_catalog.json` — ~40 common dental instruments with **illustrative** price ranges.
+- `data/price_history.csv` — ~600 synthetic sale records generated by `scripts/generate_seed_prices.py`. **Not real sales data.**
 - Demo listings use **fictional clinic names** and **fictional prices**.
-- The "Lazy Payoff" timer estimate uses a labelled formula with visible assumptions.
+- The TabPFN MAE/MAPE figures in `docs/POST_FACTS.md` are benchmarked on this synthetic data.
+- The manual workflow time is a placeholder (`MANUAL_TIME_TO_BE_MEASURED_BY_USER`).
 
 Never display these numbers as real market statistics.
 
@@ -137,7 +166,7 @@ Never display these numbers as real market statistics.
 
 ## Safety & Disclaimers
 
-- **No patient data.** Instruments only. Upload photos of instruments on a plain background. Strip EXIF/GPS on upload.
+- **No patient data.** Instruments only. Upload photos of instruments on a plain background. EXIF/GPS stripped on upload.
 - **Prohibited items**: Single-use disposables, implants, needles/sharps, and anything that cannot be reprocessed are refused.
 - **Reprocessing note**: Buyers must clean and sterilize instruments per their local regulations. DentSloth is a classifieds tool and does not certify instruments.
 - **No medical or regulatory claims.**
@@ -151,20 +180,16 @@ Never display these numbers as real market statistics.
 - Atlas Vector Search match quality depends on embedding coverage of the catalog.
 - In `DEMO_MODE=true`, model outputs are pre-recorded — not live inference.
 - TabPFN is trained on synthetic data; real accuracy depends on real sales records.
+- TabPFN weights are distributed under a non-commercial research license from Prior Labs.
 
 ---
 
-## Architecture
+## Technical Benchmarks
 
-See [`docs/architecture.md`](docs/architecture.md).
-
-## Demo Script
-
-See [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) (added in Phase 8).
-
-## TabPFN Non-Commercial License
-
-TabPFN is licensed for non-commercial use by default. For commercial deployment, see the [TabPFN license](https://github.com/automl/tabpfn). The `TABPFN_MODE=api` fallback uses the official TabPFN API under its own terms.
+See [`docs/POST_FACTS.md`](docs/POST_FACTS.md) for verified numbers:
+- **Pipeline speed**: 4.83 s median per listing (real Gemma inference, `DEMO_MODE=false`)
+- **TabPFN MAE**: ₹58.3 on synthetic holdout (75.2% reduction vs mean-by-type baseline)
+- Full disclosure of synthetic data, demo elements, and limitations
 
 ---
 

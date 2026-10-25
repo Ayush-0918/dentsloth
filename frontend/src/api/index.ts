@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_URL || '/api'
+export const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 async function req<T>(method: string, path: string, body?: unknown, isForm = false): Promise<T> {
   const opts: RequestInit = { method }
@@ -10,7 +10,7 @@ async function req<T>(method: string, path: string, body?: unknown, isForm = fal
       opts.body = JSON.stringify(body)
     }
   }
-  const res = await fetch(`${BASE}${path}`, opts)
+  const res = await fetch(`${API_BASE}${path}`, opts)
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }))
     throw new Error(err.detail || `HTTP ${res.status}`)
