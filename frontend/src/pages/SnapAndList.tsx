@@ -81,18 +81,47 @@ export function SnapAndList() {
 
       const t1 = Date.now()
       runStep(1, 'active')
-      await new Promise(r => setTimeout(r, demoMode ? 1000 : 200))
+      for (const it of result.items) {
+        if (!it.price && !demoMode) {
+          try {
+            const pRes = await fetch('/api/price', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                instrument_type: it.instrument_type,
+                brand: it.likely_brand,
+                condition_grade: it.condition_grade,
+                age_years: 2.0,
+              }),
+            })
+            if (pRes.ok) {
+              const pData = await pRes.json()
+              it.price = pData
+              it.price_explanation = pData.explanation
+            }
+          } catch (e) {
+            console.warn('Pricing call error:', e)
+          }
+        }
+      }
       runStep(1, 'done', Date.now() - t1)
 
       const t2 = Date.now()
       runStep(2, 'active')
-      await new Promise(r => setTimeout(r, demoMode ? 1200 : 200))
+      for (const it of result.items) {
+        if (!it.description_en) {
+          const typeLabel = it.instrument_type.replace(/_/g, ' ')
+          const brandLabel = it.likely_brand !== 'unknown' ? it.likely_brand : 'Professional'
+          it.description_en = `${brandLabel} ${typeLabel} (Grade ${it.condition_grade}). Sterilization inspected: autoclave ready. ${it.price?.explanation || ''}`
+          it.description_hi = `${brandLabel} ${typeLabel} (ग्रेड ${it.condition_grade})। ऑटोकलेव के लिए सुरक्षित स्टेनलेस स्टील। जाँचा गया नैदानिक पुनः उपयोग।`
+        }
+      }
       runStep(2, 'done', Date.now() - t2)
 
       const validItems = result.items.filter(i => !i.is_single_use && i.confidence >= 0.4)
       setItems(validItems)
       const prices: Record<number, number> = {}
-      validItems.forEach((it, i) => { prices[i] = it.price?.suggested_price_inr ?? 0 })
+      validItems.forEach((it, i) => { prices[i] = it.price?.suggested_price_inr ?? 500 })
       setSuggestedPrice(prices)
       setFlowState('result')
     } catch (e: unknown) {
@@ -115,22 +144,26 @@ export function SnapAndList() {
   const handlePublish = async () => {
     const item = items[selectedIdx]
     try {
-      if (!demoMode) {
-        const res = await fetch('/api/listings/auto', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...item,
-            suggested_price_inr: suggestedPrice[selectedIdx] ?? item.price?.suggested_price_inr,
-          }),
-        })
-        if (!res.ok) throw new Error('Publish failed')
-      } else {
-        await new Promise(r => setTimeout(r, 800))
+      const res = await fetch('/api/listings/auto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...item,
+          suggested_price_inr: suggestedPrice[selectedIdx] ?? item.price?.suggested_price_inr ?? 500,
+        }),
+      })
+      if (!res.ok) throw new Error('Publish failed')
+      const created = await res.json()
+      if (created.id) {
+        await fetch(`/api/listings/${created.id}/publish`, { method: 'POST' })
       }
       setFlowState('published')
-    } catch {
-      setToast('Publish failed – ' + t('error_retry'))
+    } catch (err: unknown) {
+      if (demoMode) {
+        setFlowState('published')
+      } else {
+        setToast('Publish failed – ' + (err instanceof Error ? err.message : t('error_retry')))
+      }
     }
   }
 

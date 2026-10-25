@@ -18,7 +18,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (stored === 'light' || stored === 'dark') return stored
     return typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   })
-  const demoMode = import.meta.env.VITE_DEMO_MODE === 'true'
+  const [demoMode, setDemoMode] = useState<boolean>(import.meta.env.VITE_DEMO_MODE === 'true')
+
+  useEffect(() => {
+    fetch('/api/health')
+      .then(r => r.json())
+      .then(d => {
+        if (typeof d.demo_mode === 'boolean') {
+          setDemoMode(d.demo_mode)
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
